@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" type="text/css" href="chart.css">
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="chart.js"></script>
+</head>
+<body>
+  <h1>JGB yield</h1>
+
+  <div class="myChart">
+    <div class="tooltip hidden">
+      <p><span id="date"></span></p>
+      <p><span id="value"></span>%</p>
+    </div>
+    <script>
+
+      d3.json("jgbcme_2010.json", draw);
+
+    </script>
+  </div>
+  
+  <div class="source">
+    <p><a href="http://www.mof.go.jp/english/jgbs/reference/interest_rate/index.htm">source: Ministory of Finance Japan</a></p>
+  </div>
+
+  <div class="footer">
+    <p>created by Yasuyuki Ageishi</p>
+    <p>Alright reserved</p>
+  </div>
+</body>
+</html>

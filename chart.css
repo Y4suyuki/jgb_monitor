@@ -1,0 +1,94 @@
+body {
+    position: relative;
+    margin: 0px auto;
+    width: 1000px;
+  }
+
+.tooltip {
+    position: absolute;
+    border-radius: 4px;
+    box-shadow: 2px 2px 2px #888888;
+    background-color: rgba(255, 255, 255, 1);
+  }
+.tooltip p {
+    margin: 2px;
+    padding: 1px;
+    font-size: 15px;
+  }
+
+.tooltip.hidden {
+    display: none;
+  }
+p {
+    font-family: Georgia,serif;
+  }
+h1 {
+    font-family: "SourceSansPro", "Helvetica", Arial, sans-serif;
+    color: #aaa;
+  }
+.footer {
+    text-align: center;
+    font-size: 10px;
+    margin-top: 80px;
+  }
+
+a {
+    text-decoration: none;
+  }
+.myChart {
+    position: relative;
+    top: 30px;
+  }
+
+.source{
+    text-align: right;
+  }
+  
+.line {
+    fill: none;
+    stroke-width: 2px;
+}
+  .line.one {
+    stroke: DeepPink;
+  }
+
+.line.ten {
+    stroke: steelblue;
+  }
+
+
+.focus2 circle.ten {
+    fill: rgba(70, 110, 255, 0.3);
+    stroke: steelblue;
+  }
+.focus1 circle.one {
+    fill: rgba(255, 110, 70, 0.3);
+    stroke: DeepPink;
+  }
+
+.axis {
+    font-family: arial;
+    font-size: 0.6em;
+  }
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+  }
+
+.x.axis path {
+    display: none;
+  }
+
+.brush .extent {
+  stroke: #fff;
+  fill-opacity: .25;
+  shape-rendering: crispEdges;
+}
+
+.overlay {
+  fill: none;
+  pointer-events: all;
+}
