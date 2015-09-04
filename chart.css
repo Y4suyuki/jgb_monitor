@@ -48,20 +48,22 @@ a {
     fill: none;
     stroke-width: 2px;
 }
-  .line.one {
+.line.one {
     stroke: DeepPink;
-  }
+}
 
 .line.ten {
     stroke: steelblue;
-  }
+}
+.line.ten.ref {
+    stroke: #90B4D2;
+}
 
-
-.focus2 circle.ten {
+.focusY1 circle.ten {
     fill: rgba(70, 110, 255, 0.3);
     stroke: steelblue;
   }
-.focus1 circle.one {
+.focusY10 circle.one {
     fill: rgba(255, 110, 70, 0.3);
     stroke: DeepPink;
   }

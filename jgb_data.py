@@ -2,10 +2,13 @@
 
 import requests
 
+
 url_cur = "http://www.mof.go.jp/english/jgbs/reference/interest_rate/jgbcme.csv"
 url_hist = "http://www.mof.go.jp/english/jgbs/reference/interest_rate/historical/jgbcme_all.csv"
 
 fn = 'hist_jgb.csv'
+
+
 
 if __name__ == '__main__':
     # get historical jgb interest rate data from MOF japan
