@@ -12,7 +12,12 @@
   <div class="myChart">
     <script>
 
-      d3.csv("new_hist_jgb.csv", draw);
+      d3.csv("jgb_data.csv", function(data) {
+        var draw = chart(data);
+        var selection = d3.select('.myChart');
+        draw(selection);
+      });
+
 
     </script>
   </div>
