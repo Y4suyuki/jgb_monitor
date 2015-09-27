@@ -7,6 +7,12 @@ body {
 .vline.hidden {
     display: none;
 }
+
+.tooltip.hidden {
+    display: none;
+}
+
+
 p {
     font-family: Georgia,serif;
 }

@@ -16,13 +16,16 @@ function chart(data) {
     var yield_years = Object.keys(data[0]).filter(function(x) { return x != 'Date'; }),
         yield_line_list = [],
         selected = ['1','10'];
-    
 
     var parseDate = d3.time.format("%Y/%m/%d").parse,
+        dateFormat = d3.time.format('%b %d %a %Y'),
         bisectDate = d3.bisector(function(d) { return d.Date; }).left;
 
     data.forEach(function(d) {
         d.Date = parseDate(d.Date);
+        yield_years.map(function(y) {
+            d[y] = isNaN(d[y]) ? NaN : +d[y];
+        });
     })
 
     function draw(selection) {
@@ -77,10 +80,20 @@ function chart(data) {
 
 
         var yield_extent = d3.extent(
-            data.map(function(d) { return d['1']}).concat(data.map(function(d) { return d['10']})),
+            data.map(function(d) {
+                if (d['1'] !== '-') {
+                    return d['1'];
+                } else {
+                    return 0;
+                }}).concat(data.map(function(d) {
+                    if (d['10'] !== '-') {
+                        return d['10'];
+                    } else {
+                        return 0;
+                    }})),
             function(d){ return d; }
         );
-
+        console.log(yield_extent);
         var time_extent = d3.extent(
             data,
             function(d) { return d.Date; }
@@ -160,11 +173,13 @@ function chart(data) {
 
         var ref_line = d3.svg.line()
             .x(function(d) { return time_scale(d.Date)})
-            .y(function(d) { return yield_scale_ref(d['10'])});
+            .y(function(d) { return yield_scale_ref(d['10'])})
+            .defined(function(d) { return !isNaN(d['10']); });
 
         var yield_line = d3.svg.line()
             .x(function(d) { return year_scale(d.year)})
-            .y(function(d) { return yield_scale(d.yield)});
+            .y(function(d) { return yield_scale(d.yield)})
+            .defined(function(d) { return !isNaN(d.yield); });
 
         var yield_color_scale = d3.scale.linear()
             .domain([0, yield_years.length - 1])
@@ -223,7 +238,6 @@ function chart(data) {
                     draw_layer.select('.focusY' + yld)
                         .style('display', 'none');
                 });
-
                 d3.select('.vline').classed('hidden', true);
                 d3.select('.tooltip').classed('hidden', true);
             })
@@ -334,7 +348,14 @@ function chart(data) {
 
 
         function update_yield_scale(selected) {
-            var new_max =  d3.max(selected.map(function(yld) { return data.map(function(d) { return d[yld]; }) }).reduce(function(x,y) { return x.concat(y); }, []));
+            var new_max =  d3.max(selected.map(function(yld) {
+                return data.map(function(d) {
+                    if (isNaN(d[yld])) {
+                        return 0;
+                    } else {
+                        return d[yld];
+                    }
+                }) }).reduce(function(x,y) { return x.concat(y); }, []));
 
             if (new_max != yield_extent[1]) {
                 yield_extent[1] = new_max;
@@ -356,20 +377,22 @@ function chart(data) {
             }
         };
         
-        // string, string -> draw chart 
+        // string, string -> draw chart
         function draw_hist_yield(yld, stroke) {
             
             // line function
             var hist_line = d3.svg.line()
                 .x(function(d) { return time_scale(d.Date); })
-                .y(function(d) { return yield_scale(d[yld]); });
+                .y(function(d) { return yield_scale(d[yld]); })
+                .defined(function(d) { return !isNaN(d[yld]); });
 
             // put line function into yield_line_list
             yield_line_list[yield_years.indexOf(yld)] = hist_line;
             
             // draw line
             draw_layer.append('path')
-                .attr('stroke', stroke)        
+                .attr('stroke', stroke)
+                .attr('opacity', .8)
                 .transition()
                 .duration(1000)
                 .attrTween('d', getInterpolation)
@@ -404,8 +427,10 @@ function chart(data) {
             draw_vline(time_scale(parsed_date));
 
             selected.map(function(yld) {
-                draw_layer.select('.focusY' + yld)
-                    .attr('transform', 'translate(' + time_scale(parsed_date) + ',' + yield_scale(d[yld]) + ')');
+                if (!isNaN(d[yld])) {
+                    draw_layer.select('.focusY' + yld)
+                        .attr('transform', 'translate(' + time_scale(parsed_date) + ',' + yield_scale(d[yld]) + ')');
+                }
 
             });
 
@@ -431,12 +456,12 @@ function chart(data) {
                 .selectAll('text.yield')
                 .text(function(yld) {
                     var fmt = d3.format('2d');
-                    return fmt(parseInt(yld)) + 'Y: ' + d3.round(d[yld],3);
+                    var yld_text = isNaN(d[yld]) ? '-' : d3.round(d[yld],3)
+                    return fmt(parseInt(yld)) + 'Y: ' + yld_text;
                 });
             d3.select('.tooltip')
                 .select('text.date')
-                .text(d.Date);
-
+                .text(dateFormat(d.Date));
         }
 
 
