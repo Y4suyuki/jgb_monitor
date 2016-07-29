@@ -48,10 +48,10 @@ def get_jgb_data(url, fn, new_fn):
     return r
 
 def merge_jgb(fn_cur, fn_hist):
-    jgbcme = pd.read_csv(fn_cur, header=True, index_col=0)
-    jgbcme_all = pd.read_csv(fn_hist, header=False, index_col=0)
-    jgbcme.columns = jgbcme_all.columns
+    jgbcme = pd.read_csv(fn_cur, skiprows=1, index_col=0)
+    jgbcme_all = pd.read_csv(fn_hist, skiprows=1, index_col=0)
     res = jgbcme_all.append(jgbcme)
+    res.columns = map(lambda x: x.replace('Y', ''), res.columns)
     return res
 
 if __name__ == '__main__':
@@ -63,6 +63,6 @@ if __name__ == '__main__':
     # getting historical jgb data
     get_jgb_data(url_hist, fn_hist, new_fn_hist)
 
-    jgbcme_df = merge_jgb(new_fn_cur, new_fn_hist)
-    jgbcme_df.to_csv(fn, index=True)
+    jgbcme_df = merge_jgb(fn_cur, fn_hist)
+    jgbcme_df.to_csv('jgb_data_raw.csv', index=True)
     print '[+] [%s] and [%s] merged data saved at [%s]' % (new_fn_cur, new_fn_hist, fn)
