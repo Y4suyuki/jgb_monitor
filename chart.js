@@ -1,6 +1,7 @@
 function chart(data) {
     "use strict";
 
+    // for debug
     console.log(data);
     
     var margin = {top:20, right:320, bottom:180, left:40},
@@ -93,17 +94,18 @@ function chart(data) {
                     }})),
             function(d){ return d; }
         );
-        console.log(yield_extent);
+
         var time_extent = d3.extent(
             data,
             function(d) { return d.Date; }
         );
 
         var year_extent = d3.extent(yield_years.map(function(x) { return parseInt(x); }), function(y) { return y});
+        
+        // for debug
         console.log(yield_years);
         console.log(year_extent);
         console.log(time_extent);
-        console.log(time_extent[1]);
 
         //defining domain for scale
         yield_scale.domain(yield_extent);
@@ -245,18 +247,19 @@ function chart(data) {
 
         var create_tooltip = function() {
 
-            var tooltip_width = 90,
+            var tooltip_width = 100,
                 font_size = 20;
             var tooltip = label_layer.append('g')
                 .attr('class', 'tooltip')
                 .attr('x', 0)
                 .attr('y', 0);
 
+            //tooltip background rect
             tooltip.append('rect')
                 .attr('x', - tooltip_width - 15)
                 .attr('y', 10)
                 .attr('width', tooltip_width)
-                .attr('height', 220)
+                .attr('height', (yield_years.length + 1) * (font_size + 3))
                 .attr('fill', '#fff')
                 .attr('opacity', .7)
 
@@ -285,7 +288,7 @@ function chart(data) {
             .attr('transform', 'translate(' + (width - 265) + ',' + 10 + ')');
 
         var square_size = 15;
-        console.log(selected);
+
         dashboard.selectAll('g')
             .data(yield_years)
             .enter()
@@ -359,6 +362,8 @@ function chart(data) {
 
             if (new_max != yield_extent[1]) {
                 yield_extent[1] = new_max;
+
+                // for debug
                 console.log('update yield scale!');
                 yield_scale.domain(yield_extent);
                 // update yield axis
@@ -422,8 +427,7 @@ function chart(data) {
             var i = x0 - data[i1-1]['Date'] > data[i1]['Date'] - x0 ? i1 : i1 - 1,
                 d = data[i],
                 parsed_date = d.Date;
-            console.log(data[i1]);
-            console.log(data[i1-1]);
+            
             draw_vline(time_scale(parsed_date));
 
             selected.map(function(yld) {

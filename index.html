@@ -12,7 +12,8 @@
   <div class="myChart">
     <script>
 
-      d3.csv("jgb_data_raw.csv", function(data) {
+      //d3.csv("final_data.csv", function(data) {
+      d3.csv("jgb_data_raw.csv", function(data){
         var draw = chart(data);
         var selection = d3.select('.myChart');
         draw(selection);
